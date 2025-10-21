@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>颜色相似度比较工具</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎨 颜色相似度比较工具</h1>
+            <p>使用 CIELAB ΔE76 算法比较颜色相似度</p>
+        </header>
+
+        <div class="upload-section">
+            <div class="upload-group">
+                <h3>1. 上传目标颜色图片</h3>
+                <div class="upload-area" id="characterUpload">
+                    <input type="file" id="characterInput" accept="image/*" hidden>
+                    <div class="upload-placeholder">
+                        <span>点击上传目标颜色图片</span>
+                    </div>
+                    <div class="image-preview" id="characterPreview"></div>
+                </div>
+                
+                <!-- 目标图片裁剪模态框 -->
+                <div id="characterCropModal" class="crop-modal">
+                    <div class="crop-modal-content">
+                        <div class="crop-modal-header">
+                            <h3>裁剪目标颜色图片</h3>
+                            <button class="close-btn" id="characterCloseCrop">×</button>
+                        </div>
+                        <div class="crop-container">
+                            <img id="characterCropImage" src="" alt="裁剪图片">
+                        </div>
+                        <div class="crop-controls">
+                            <button id="characterCancelCrop" class="btn btn-secondary">取消</button>
+                            <button id="characterConfirmCrop" class="btn btn-primary">确认裁剪</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="color-display" id="characterColorDisplay"></div>
+            </div>
+
+            <div class="upload-group">
+                <h3>2. 参考颜色区域管理</h3>
+                <div id="merchantAreas" class="merchant-areas">
+                    <!-- 区域将通过JS动态添加 -->
+                </div>
+                
+                <!-- 底部添加区域按钮 -->
+                <div class="areas-controls-bottom">
+                    <button id="addAreaBottomBtn" class="btn btn-primary add-area-btn">+ 添加参考颜色区域</button>
+                </div>
+                
+                <!-- 参考颜色图片裁剪模态框 -->
+                <div id="merchantCropModal" class="crop-modal">
+                    <div class="crop-modal-content">
+                        <div class="crop-modal-header">
+                            <h3>裁剪参考颜色图片</h3>
+                            <button class="close-btn" id="merchantCloseCrop">×</button>
+                        </div>
+                        <div class="crop-container">
+                            <img id="merchantCropImage" src="" alt="裁剪图片">
+                        </div>
+                        <div class="crop-controls">
+                            <button id="merchantCancelCrop" class="btn btn-secondary">取消</button>
+                            <button id="merchantConfirmCrop" class="btn btn-primary">确认裁剪</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button id="analyzeBtn" class="analyze-btn" disabled>开始分析</button>
+        </div>
+
+        <div class="results-section" id="resultsSection" style="display: none;">
+            <h2>分析结果</h2>
+            
+            <div class="reference-color">
+                <h3>目标颜色</h3>
+                <div class="color-info">
+                    <div class="color-swatch" id="refColorSwatch"></div>
+                    <div class="color-details">
+                        <div>RGB: <span id="refRGB"></span></div>
+                        <div>HEX: <span id="refHEX"></span></div>
+                        <div>Lab: <span id="refLab"></span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="top-colors">
+                <h3>最相似的5种颜色</h3>
+                <div class="ranking" id="rankingList"></div>
+            </div>
+
+            <div class="visualization">
+                <h3>颜色对比可视化</h3>
+                <canvas id="colorCanvas" width="1000" height="500"></canvas>
+            </div>
+
+            <div class="deltaE-info">
+                <h4>ΔE 值解释：</h4>
+                <ul>
+                    <li>ΔE &lt; 1.0：人眼无法察觉差异</li>
+                    <li>1.0 &lt; ΔE &lt; 2.0：专业观察者可察觉差异</li>
+                    <li>2.0 &lt; ΔE &lt; 5.0：轻微差异，非常相似</li>
+                    <li>5.0 &lt; ΔE &lt; 10.0：可察觉差异，但仍相似</li>
+                    <li>ΔE &gt; 10.0：明显不同的颜色</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
